@@ -1,0 +1,97 @@
+<div class="home-container">
+  <header class="header">
+    <div class="header-content">
+      <h1 (click)="scrollToTop()" class="logo">CineVerse</h1>
+      <nav class="nav-menu">
+        <a href="#popular" (click)="scrollToSection('popular', $event)">Populares</a>
+        <a href="#top-rated" (click)="scrollToSection('top-rated', $event)">Mejor Clasificadas</a>
+        <a href="#upcoming" (click)="scrollToSection('upcoming', $event)">Próximas</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    
+    <!--Popular Movies Section-->
+    <section class="movies-section" id="popular">
+      <h2 class="section-title">Peliculas Populares</h2>
+      <div class="movies-grid" *ngIf="!loading.popular; else popularLoading">
+        <mat-card class ="movie-card" *ngFor="let movie of popularMovies"
+                  [routerLink]="['/movie', movie.id]">
+          <img mat-card-image [src]="getImageUrl(movie.poster_path)" [alt]="movie.title">
+          <mat-card-content>
+            <h3>{{ movie.title }}</h3>
+            <p class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</p>
+            <p class="release-date">{{ movie.release_date | date:'yyyy' }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <ng-template #popularLoading>
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      </ng-template>
+      <div class="pagination" *ngIf="!loading.popular">
+        <button mat-raised-button (click)="loadMorePopular()" [disabled]="popularPage >= 5">
+          Cargar más populares
+        </button>
+      </div>
+    </section>
+
+    <!--Top Rated Movies Section-->
+    <section class="movies-section" id="top-rated">
+      <h2 class="section-title">Mejor Clasificadas</h2>
+      <div class="movies-grid" *ngIf="!loading.topRated; else topRatedLoading">
+        <mat-card class="movie-card" *ngFor="let movie of topRatedMovies"   [routerLink]="['/movie', movie.id]">
+          <img mat-card-image [src]="getImageUrl(movie.poster_path)" [alt]="movie.title">
+          <mat-card-content>
+            <h3>{{ movie.title }}</h3>
+            <p class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</p>
+            <p class="release-date">{{ movie.release_date | date: 'yyyy' }}</p>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <ng-template #topRatedLoading>
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      </ng-template>
+      <div class="pagination" *ngIf="!loading.topRated">
+        <button mat-raised-button (click)="loadMoreTopRated()" [disabled]="topRatedPage >= 5">
+          Cargar más mejor clasificadas
+        </button>
+      </div>
+    </section>
+
+    <!--Upcoming Movies Section-->
+    <section class="movie-section" id="upcoming">
+      <h2 class="section-title">Próximas Películas</h2>
+      <div class="movies-grid" *ngIf="!loading.upcoming; else upcomingLoading">
+        <mat-card class="movie-card" *ngFor="let movie of upcomingMovies" 
+                  [routerLink]="['/movie', movie.id]">
+          <img mat-card-image [src]="getImageUrl(movie.poster_path)" [alt]="movie.title">
+          <mat-card-content>
+            <h3>{{ movie.title }}</h3>
+            <p class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</p>
+            <p class="release-date">{{ movie.release_date | date:'yyyy' }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <ng-template #upcomingLoading>
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      </ng-template>
+      <div class="pagination" *ngIf="!loading.upcoming">
+        <button mat-raised-button (click)="loadMoreUpcoming()" [disabled]="upcomingPage >= 5">
+          Cargar más próximas
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2025 CineVerse. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+</div> 
