@@ -16,8 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 
-// RxJS para manejar múltiples observables
-import { forkJoin } from 'rxjs';
+// RxJS para manejar observables
 import { Api, Movie } from '../../service/api';
 
 @Component({
@@ -62,20 +61,10 @@ export class MovieDetailComponent implements OnInit {
     this.error = false;
     this.loading = true;
 
-    forkJoin([
-      this.api.getPopularMovies(),
-      this.api.getTopRatedMovies(),
-      this.api.getUpcomingMovies()
-    ]).subscribe({
-      // Buscar la película en las tres listas
-      next: ([popular, topRated, upcoming]) => {
-        this.movie = 
-          popular.results.find(m => m.id.toString() === movieId) ||
-          topRated.results.find(m => m.id.toString() === movieId) ||
-          upcoming.results.find(m => m.id.toString() === movieId) ||
-          null;
+    this.api.getMovieById(movieId).subscribe({
+      next: (movie) => {
+        this.movie = movie;
         this.loading = false;
-        if (!this.movie) this.error = true;
       },
       error: (error) => {
         // Manejo de error en la solicitud HTTP
@@ -83,7 +72,7 @@ export class MovieDetailComponent implements OnInit {
         this.loading = false;
         this.error = true;
       }
-    })
+    });
   }
 
   // Método para obtener la URL de la imagen de la película

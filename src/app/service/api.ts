@@ -63,6 +63,11 @@ export class Api {
   getUpcomingMovies(page: number = 1):Observable<MovieResponse>{
     return this.http.get<MovieResponse>(`${this.apiUrl}/movie/upcoming?api_key=${this.apiKey}&page=${page}`).pipe(catchError(this.handleError));
   }
+
+  //metodo para obtener los detalles de una película específica por ID
+  getMovieById(movieId: string):Observable<Movie>{
+    return this.http.get<Movie>(`${this.apiUrl}/movie/${movieId}?api_key=${this.apiKey}`).pipe(catchError(this.handleError));
+  }
 }
 
 
